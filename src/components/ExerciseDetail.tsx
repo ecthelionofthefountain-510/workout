@@ -23,8 +23,9 @@ export function ExerciseDetail({ exercise, onBack, onAddSet, onDeleteSet }: Prop
     setWeight('')
   }
 
-  // Personligt rekord = tyngsta vikten som loggats för övningen.
+  // Statistik för övningen.
   const heaviest = exercise.sets.reduce((max, s) => Math.max(max, s.weight), 0)
+  const totalVolume = exercise.sets.reduce((sum, s) => sum + s.reps * s.weight, 0)
 
   return (
     <div>
@@ -34,10 +35,24 @@ export function ExerciseDetail({ exercise, onBack, onAddSet, onDeleteSet }: Prop
 
       <div className="detail-head">
         <h2>{exercise.name}</h2>
-        {exercise.sets.length > 0 && (
-          <p className="pr">Tyngsta: {heaviest} kg</p>
-        )}
       </div>
+
+      {exercise.sets.length > 0 && (
+        <div className="stat-row">
+          <div className="stat-tile">
+            <span className="stat-value">{heaviest}</span>
+            <span className="stat-label">Tyngsta (kg)</span>
+          </div>
+          <div className="stat-tile">
+            <span className="stat-value">{exercise.sets.length}</span>
+            <span className="stat-label">Set</span>
+          </div>
+          <div className="stat-tile">
+            <span className="stat-value">{totalVolume}</span>
+            <span className="stat-label">Volym (kg)</span>
+          </div>
+        </div>
+      )}
 
       <form className="card log-form" onSubmit={handleSubmit}>
         <label>
@@ -67,13 +82,20 @@ export function ExerciseDetail({ exercise, onBack, onAddSet, onDeleteSet }: Prop
       </form>
 
       {exercise.sets.length === 0 ? (
-        <p className="empty">Inga set loggade än. Kör igång! 🔥</p>
+        <p className="empty">
+          <span className="big">🔥</span>
+          Inga set loggade än. Kör igång!
+        </p>
       ) : (
         <ul className="set-list">
-          {exercise.sets.map((set) => (
-            <li key={set.id} className="card set-row">
+          {exercise.sets.map((set, index) => (
+            <li
+              key={set.id}
+              className={`card set-row${index === 0 ? ' set-row--latest' : ''}`}
+            >
+              <span className="set-index">{exercise.sets.length - index}</span>
               <span className="set-main">
-                {set.reps} reps × {set.weight} kg
+                {set.reps} reps × <span className="weight">{set.weight} kg</span>
               </span>
               <span className="set-date">{set.date}</span>
               <button

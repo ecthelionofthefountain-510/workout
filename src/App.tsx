@@ -45,7 +45,11 @@ export default function App() {
   return (
     <div className="app">
       <header className="app-header">
-        <h1>🏋️ Träningslogg</h1>
+        <span className="brand-mark">🏋️</span>
+        <div className="brand">
+          <h1>Träningslogg</h1>
+          <p className="brand-sub">Håll koll på din progress</p>
+        </div>
       </header>
 
       <main>
@@ -59,6 +63,7 @@ export default function App() {
         ) : (
           <>
             <AddExerciseForm onAdd={addExercise} />
+            <p className="section-label">Dina övningar</p>
             <ExerciseList
               exercises={exercises}
               onSelect={setSelectedId}
