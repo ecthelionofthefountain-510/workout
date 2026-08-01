@@ -1,4 +1,5 @@
 import type { Exercise } from '../types'
+import { MuscleArt } from './MuscleArt'
 
 interface Props {
   exercises: Exercise[]
@@ -34,7 +35,13 @@ export function ExerciseList({ exercises, onSelect, onDelete }: Props) {
       {exercises.map((exercise) => (
         <li key={exercise.id} className="exercise-card">
           <button className="exercise-card-main" onClick={() => onSelect(exercise.id)}>
-            <span className="exercise-avatar">{exercise.name.charAt(0)}</span>
+            <span className="thumb">
+              {exercise.group ? (
+                <MuscleArt group={exercise.group} />
+              ) : (
+                <span className="thumb-letter">{exercise.name.charAt(0)}</span>
+              )}
+            </span>
             <span className="exercise-info">
               <span className="exercise-title">{exercise.name}</span>
               <span className="exercise-meta">{summary(exercise)}</span>

@@ -50,39 +50,228 @@ body {
   padding: 1.25rem 1.1rem 4rem;
 }
 
-/* ---------- Header / brand ---------- */
-.app-header {
+/* ---------- Toppbar / brand ---------- */
+.topbar {
   display: flex;
   align-items: center;
-  gap: 0.8rem;
-  margin: 0.5rem 0 1.75rem;
+  gap: 0.6rem;
+  width: max-content;
+  margin: 0.25rem 0 1.1rem;
+  cursor: pointer;
 }
 
 .brand-mark {
   display: grid;
   place-items: center;
-  width: 48px;
-  height: 48px;
-  border-radius: 14px;
+  width: 38px;
+  height: 38px;
+  border-radius: 11px;
   background: var(--accent-grad);
   box-shadow: var(--shadow-accent);
-  font-size: 1.5rem;
+  color: #fff;
 }
 
-.brand h1 {
+.brand-mark .hero-svg {
+  width: 74%;
+  height: 74%;
+}
+
+.brand-name {
   font-family: 'Barlow Condensed', sans-serif;
   font-weight: 800;
-  letter-spacing: 0.04em;
+  letter-spacing: 0.05em;
   text-transform: uppercase;
-  font-size: 1.9rem;
+  font-size: 1.35rem;
   line-height: 1;
-  margin: 0;
 }
 
-.brand-sub {
-  margin: 0.15rem 0 0;
-  color: var(--muted);
+/* ---------- Hero ---------- */
+.hero {
+  position: relative;
+  overflow: hidden;
+  background: var(--accent-grad);
+  border-radius: 20px;
+  padding: 1.3rem 1.4rem 1.4rem;
+  margin-bottom: 1.3rem;
+  box-shadow: var(--shadow-accent);
+  color: #fff;
+}
+
+.hero-kicker {
+  margin: 0;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  font-size: 0.72rem;
+  opacity: 0.9;
+}
+
+.hero-title {
+  font-family: 'Barlow Condensed', sans-serif;
+  font-weight: 800;
+  text-transform: uppercase;
+  font-size: 2.4rem;
+  line-height: 0.95;
+  margin: 0.25rem 0 0.55rem;
+}
+
+.hero-sub {
+  margin: 0;
+  font-weight: 600;
   font-size: 0.85rem;
+  opacity: 0.92;
+}
+
+.hero-art {
+  position: absolute;
+  right: -8px;
+  bottom: -16px;
+  width: 150px;
+  height: 150px;
+  color: #fff;
+  opacity: 0.18;
+  pointer-events: none;
+}
+
+.hero-svg,
+.muscle-svg {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+/* ---------- Muskelgrupps-rutnät ---------- */
+.group-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.7rem;
+  margin-bottom: 0.5rem;
+}
+
+.group-card {
+  position: relative;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: flex-end;
+  gap: 0.05rem;
+  min-height: 128px;
+  padding: 1rem;
+  text-align: left;
+  color: var(--text);
+  background: linear-gradient(160deg, var(--surface-2), var(--surface));
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  box-shadow: none;
+  transition: transform 0.12s ease, border-color 0.15s ease, box-shadow 0.15s ease;
+}
+
+.group-card:hover {
+  filter: none;
+  transform: translateY(-2px);
+  border-color: #3a424f;
+  box-shadow: var(--shadow);
+}
+
+.group-art {
+  position: absolute;
+  top: 0.7rem;
+  right: 0.7rem;
+  width: 60px;
+  height: 60px;
+  display: grid;
+  place-items: center;
+  color: var(--accent-2);
+  opacity: 0.95;
+}
+
+.group-name {
+  font-family: 'Barlow Condensed', sans-serif;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.02em;
+  font-size: 1.4rem;
+  line-height: 1;
+}
+
+.group-count {
+  color: var(--muted);
+  font-size: 0.78rem;
+}
+
+/* ---------- Thumbnails (gemensam ikon-bricka) ---------- */
+.thumb {
+  flex-shrink: 0;
+  width: 48px;
+  height: 48px;
+  display: grid;
+  place-items: center;
+  border-radius: 12px;
+  background: var(--accent-soft);
+  color: var(--accent-2);
+}
+
+.thumb .muscle-svg {
+  width: 62%;
+  height: 62%;
+}
+
+.thumb-letter {
+  font-family: 'Barlow Condensed', sans-serif;
+  font-weight: 800;
+  font-size: 1.3rem;
+  text-transform: uppercase;
+}
+
+/* ---------- Muskelgrupps-header (i gruppvyn) ---------- */
+.group-head {
+  display: flex;
+  align-items: center;
+  gap: 0.8rem;
+  margin: 0.2rem 0 1.1rem;
+}
+
+.group-head-art {
+  flex-shrink: 0;
+  width: 56px;
+  height: 56px;
+  display: grid;
+  place-items: center;
+  border-radius: 14px;
+  background: var(--accent-soft);
+  color: var(--accent-2);
+}
+
+.group-head-art .muscle-svg {
+  width: 60%;
+  height: 60%;
+}
+
+.group-head h2 {
+  margin: 0;
+  font-family: 'Barlow Condensed', sans-serif;
+  font-weight: 800;
+  text-transform: uppercase;
+  font-size: 2.2rem;
+  line-height: 1;
+}
+
+/* ---------- Egen övning (nedtonad) ---------- */
+.muted-label {
+  opacity: 0.65;
+}
+
+.custom-add .add-form {
+  background: transparent;
+  border: 1px dashed var(--border);
+  box-shadow: none;
+}
+
+.custom-add .add-form button {
+  background: var(--surface-2);
+  color: var(--accent-2);
+  box-shadow: none;
 }
 
 /* ---------- Generiska element ---------- */
@@ -287,7 +476,26 @@ button:active {
 
 /* ---------- Detaljvy ---------- */
 .detail-head {
+  display: flex;
+  align-items: center;
+  gap: 0.7rem;
   margin-bottom: 1.1rem;
+}
+
+.detail-art {
+  flex-shrink: 0;
+  width: 52px;
+  height: 52px;
+  display: grid;
+  place-items: center;
+  border-radius: 13px;
+  background: var(--accent-soft);
+  color: var(--accent-2);
+}
+
+.detail-art .muscle-svg {
+  width: 60%;
+  height: 60%;
 }
 
 .detail-head h2 {

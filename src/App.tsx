@@ -1,25 +1,49 @@
 import { useState } from 'react'
 import type { Exercise, SetEntry } from './types'
+import type { CatalogExercise, MuscleGroupId } from './catalog'
 import { useLocalStorage } from './useLocalStorage'
-import { AddExerciseForm } from './components/AddExerciseForm'
-import { ExerciseList } from './components/ExerciseList'
+import { Home } from './components/Home'
+import { GroupScreen } from './components/GroupScreen'
 import { ExerciseDetail } from './components/ExerciseDetail'
+import { HeroArt } from './components/MuscleArt'
+
+// Vilken skärm som visas just nu.
+type View =
+  | { screen: 'home' }
+  | { screen: 'group'; group: MuscleGroupId }
+  | { screen: 'exercise'; id: string }
 
 export default function App() {
   const [exercises, setExercises] = useLocalStorage<Exercise[]>('workout.exercises', [])
-  // Vilken övning som är öppen just nu (null = startvyn med listan).
-  const [selectedId, setSelectedId] = useState<string | null>(null)
+  const [view, setView] = useState<View>({ screen: 'home' })
 
-  const selected = exercises.find((e) => e.id === selectedId) ?? null
-
-  function addExercise(name: string) {
+  function addCustomExercise(name: string) {
     const exercise: Exercise = { id: crypto.randomUUID(), name, sets: [] }
     setExercises((prev) => [...prev, exercise])
+    setView({ screen: 'exercise', id: exercise.id })
+  }
+
+  function openCatalogExercise(cat: CatalogExercise) {
+    const existing = exercises.find(
+      (e) => e.name.toLowerCase() === cat.name.toLowerCase(),
+    )
+    if (existing) {
+      setView({ screen: 'exercise', id: existing.id })
+      return
+    }
+    const exercise: Exercise = {
+      id: crypto.randomUUID(),
+      name: cat.name,
+      group: cat.group,
+      sets: [],
+    }
+    setExercises((prev) => [...prev, exercise])
+    setView({ screen: 'exercise', id: exercise.id })
   }
 
   function deleteExercise(id: string) {
     setExercises((prev) => prev.filter((e) => e.id !== id))
-    if (selectedId === id) setSelectedId(null)
+    setView({ screen: 'home' })
   }
 
   function addSet(exerciseId: string, reps: number, weight: number) {
@@ -42,34 +66,56 @@ export default function App() {
     )
   }
 
+  // Tillbaka: från en övning går vi till dess muskelgrupp (om den har en),
+  // annars till startsidan.
+  function goBack() {
+    if (view.screen === 'exercise') {
+      const exercise = exercises.find((e) => e.id === view.id)
+      setView(exercise?.group ? { screen: 'group', group: exercise.group } : { screen: 'home' })
+    } else {
+      setView({ screen: 'home' })
+    }
+  }
+
+  const selected =
+    view.screen === 'exercise' ? exercises.find((e) => e.id === view.id) ?? null : null
+
   return (
     <div className="app">
-      <header className="app-header">
-        <span className="brand-mark">🏋️</span>
-        <div className="brand">
-          <h1>Träningslogg</h1>
-          <p className="brand-sub">Håll koll på din progress</p>
-        </div>
+      <header className="topbar" onClick={() => setView({ screen: 'home' })}>
+        <span className="brand-mark">
+          <HeroArt />
+        </span>
+        <span className="brand-name">Träningslogg</span>
       </header>
 
       <main>
-        {selected ? (
+        {view.screen === 'home' && (
+          <Home
+            exercises={exercises}
+            onOpenGroup={(group) => setView({ screen: 'group', group })}
+            onOpenExercise={(id) => setView({ screen: 'exercise', id })}
+            onAddCustom={addCustomExercise}
+            onDeleteExercise={deleteExercise}
+          />
+        )}
+
+        {view.screen === 'group' && (
+          <GroupScreen
+            group={view.group}
+            exercises={exercises}
+            onBack={goBack}
+            onPick={openCatalogExercise}
+          />
+        )}
+
+        {selected && (
           <ExerciseDetail
             exercise={selected}
-            onBack={() => setSelectedId(null)}
+            onBack={goBack}
             onAddSet={addSet}
             onDeleteSet={deleteSet}
           />
-        ) : (
-          <>
-            <AddExerciseForm onAdd={addExercise} />
-            <p className="section-label">Dina övningar</p>
-            <ExerciseList
-              exercises={exercises}
-              onSelect={setSelectedId}
-              onDelete={deleteExercise}
-            />
-          </>
         )}
       </main>
     </div>

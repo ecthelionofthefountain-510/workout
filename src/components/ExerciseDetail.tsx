@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import type { Exercise } from '../types'
+import { MuscleArt } from './MuscleArt'
 
 interface Props {
   exercise: Exercise
@@ -34,6 +35,11 @@ export function ExerciseDetail({ exercise, onBack, onAddSet, onDeleteSet }: Prop
       </button>
 
       <div className="detail-head">
+        {exercise.group && (
+          <span className="detail-art">
+            <MuscleArt group={exercise.group} />
+          </span>
+        )}
         <h2>{exercise.name}</h2>
       </div>
 

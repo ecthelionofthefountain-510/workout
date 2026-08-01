@@ -6,9 +6,12 @@ export interface SetEntry {
   weight: number // i kg
 }
 
+import type { MuscleGroupId } from './catalog'
+
 // En övning (t.ex. "Marklyft") med alla loggade set.
 export interface Exercise {
   id: string
   name: string
+  group?: MuscleGroupId // vilken muskelgrupp övningen tillhör (om vald ur katalogen)
   sets: SetEntry[]
 }
